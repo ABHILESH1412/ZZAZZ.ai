@@ -99,7 +99,7 @@ export function PublicWork(props: { publication: Publication; dirty: boolean }) 
         <div class="public-layout">
           <article class="card article-card">
             <Show when={props.publication.draft.title.trim().toLowerCase() === 'the city after midnight'}>
-              <figure class="article-cover"><img class="article-image" src="/night-tram.webp" alt="Illustrative image of a tram on a rain-soaked street at night" /><figcaption>AI-generated illustration</figcaption></figure>
+              <figure class="article-cover"><img class="article-image" src={import.meta.env.BASE_URL + 'night-tram.webp'} alt="Illustrative image of a tram on a rain-soaked street at night" /><figcaption>AI-generated illustration</figcaption></figure>
             </Show>
             <div class="article-content">
               <div class="eyebrow">{props.publication.draft.topic}</div>

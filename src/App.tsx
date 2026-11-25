@@ -86,7 +86,7 @@ export default function App() {
       <a class="skip-link" href="#main-content" onClick={event => { event.preventDefault(); content.focus(); }}>Skip to main content</a>
       <aside class="sidebar">
         <a class="brand" href="#editor" aria-label="Folio Rights Studio">
-          <img src="/folio.svg" width="40" height="40" alt="" />
+          <img src={import.meta.env.BASE_URL + 'folio.svg'} width="40" height="40" alt="" />
           <span><strong>Folio<span>.</span></strong><small>RIGHTS STUDIO</small></span>
         </a>
         <nav class="sidebar-nav" aria-label="Workspace">
