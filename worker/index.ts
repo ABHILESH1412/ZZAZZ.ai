@@ -1,27 +1,9 @@
-import { DurableObject } from 'cloudflare:workers';
 import { endpoint, getSuggestions, parseDraft, requestLimit } from '../server/gemini';
 
 interface Env {
-  FOLIO_DAILY_LIMIT: DurableObjectNamespace<DailyLimit>;
   GEMINI_API_KEY: string;
   GEMINI_MODEL: string;
   FOLIO_ORIGIN: string;
-}
-
-const dailyLimit = 8;
-
-export class DailyLimit extends DurableObject {
-  reserve() {
-    const day = new Date().toISOString().slice(0, 10);
-    return this.ctx.storage.transactionSync(() => {
-      const storage = this.ctx.storage.kv;
-      const record = storage.get<{ day: string; used: number }>('daily');
-      const used = record?.day === day ? record.used : 0;
-      if (used >= dailyLimit) return false;
-      storage.put('daily', { day, used: used + 1 });
-      return true;
-    });
-  }
 }
 
 async function readDraft(request: Request) {
@@ -72,13 +54,6 @@ export default {
     const result = await readDraft(request);
     if (!result.draft) return send(result.status, { error: result.error });
 
-    try {
-      if (!await env.FOLIO_DAILY_LIMIT.getByName('folio').reserve()) {
-        return send(429, { error: 'The demo has reached its daily limit of 8 AI requests. Try again after midnight UTC.' });
-      }
-    } catch {
-      return send(503, { error: 'Live suggestions are temporarily unavailable.' });
-    }
     const suggestions = await getSuggestions(result.draft, { apiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL }, async (url, options) => {
       try {
         const response = await fetch(url, options);
