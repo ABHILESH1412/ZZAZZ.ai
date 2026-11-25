@@ -9,7 +9,7 @@
     "FOLIO_ORIGIN": "https://abhilesh1412.github.io",
     "GEMINI_MODEL": "gemini-3.1-flash-lite"
   },
-  "secrets": { "required": ["GEMINI_API_KEY", "FOLIO_DEMO_CODE"] },
+  "secrets": { "required": ["GEMINI_API_KEY"] },
   "durable_objects": {
     "bindings": [{ "name": "FOLIO_DAILY_LIMIT", "class_name": "DailyLimit" }]
   },

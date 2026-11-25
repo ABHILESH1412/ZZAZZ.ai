@@ -3,7 +3,6 @@ import { endpoint, getSuggestions, parseDraft, requestLimit } from '../server/ge
 
 interface Env {
   FOLIO_DAILY_LIMIT: DurableObjectNamespace<DailyLimit>;
-  FOLIO_DEMO_CODE: string;
   GEMINI_API_KEY: string;
   GEMINI_MODEL: string;
   FOLIO_ORIGIN: string;
@@ -23,13 +22,6 @@ export class DailyLimit extends DurableObject {
       return true;
     });
   }
-}
-
-async function validCode(actual: string, expected: string) {
-  if (actual.length < 16 || actual.length > 128 || expected.length < 16) return false;
-  const encoder = new TextEncoder();
-  const [left, right] = await Promise.all([actual, expected].map(value => crypto.subtle.digest('SHA-256', encoder.encode(value))));
-  return crypto.subtle.timingSafeEqual(left, right);
 }
 
 async function readDraft(request: Request) {
@@ -71,15 +63,12 @@ export default {
     if (new URL(request.url).pathname !== endpoint) return send(404, { error: 'Unknown endpoint.' });
     if (request.method === 'OPTIONS') {
       headers.set('Access-Control-Allow-Methods', 'POST');
-      headers.set('Access-Control-Allow-Headers', 'Content-Type, X-Folio-Demo-Code');
+      headers.set('Access-Control-Allow-Headers', 'Content-Type');
       return new Response(null, { status: 204, headers });
     }
     if (request.method !== 'POST') return send(405, { error: 'Use POST to request editorial suggestions.' });
     if (request.headers.get('Content-Type')?.split(';')[0] !== 'application/json') return send(415, { error: 'Send the draft as JSON.' });
-    if (!env.FOLIO_DEMO_CODE || !env.GEMINI_API_KEY) return send(503, { error: 'Live suggestions are temporarily unavailable.' });
-    if (!await validCode(request.headers.get('X-Folio-Demo-Code') ?? '', env.FOLIO_DEMO_CODE)) {
-      return send(401, { error: 'Enter the reviewer code shared with your submission link.' });
-    }
+    if (!env.GEMINI_API_KEY) return send(503, { error: 'Live suggestions are temporarily unavailable.' });
     const result = await readDraft(request);
     if (!result.draft) return send(result.status, { error: result.error });
 

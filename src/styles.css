@@ -323,6 +323,3 @@ tbody td { color: #4b5a4e; }
   .lineage-node .soft-icon { width: 27px; height: 27px; }
   .map-caption { padding-inline: 13px; }
 }
-
-.reviewer-code { display: grid; gap: 5px; max-width: 260px; margin: 10px 0; color: var(--ink); font-size: .82rem; font-weight: 750; }
-.reviewer-code input { width: 100%; min-height: 39px; padding: 6px 9px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); background: var(--paper); }

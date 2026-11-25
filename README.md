@@ -23,7 +23,7 @@ On **Write & value**, select **Get AI suggestions**. Folio sends the title, topi
 
 The GitHub Pages frontend can use the Cloudflare Worker when the build sets `VITE_FOLIO_SUGGESTIONS_URL` to the Worker’s full `/api/editorial-suggestions` URL. Build the hosted frontend with `VITE_STATIC_DEMO=1` and Vite’s `--base /ZZAZZ.ai/`. Without a Worker URL, that static build shows the local setup note. `npm run check:worker` type-checks the Worker.
 
-The hosted demo uses Gemini 3.1 Flash-Lite. Set `GEMINI_API_KEY` and `FOLIO_DEMO_CODE` as Worker secrets. Use a randomly generated reviewer code of at least 16 characters and send it separately to reviewers. The Worker accepts requests from the configured Pages origin after checking the reviewer code, and reserves up to eight generation requests per UTC day across the entire demo. Opening the page does not send a draft. The site sends draft text to Gemini when a reviewer requests suggestions.
+The hosted demo uses Gemini 3.1 Flash-Lite. Set `GEMINI_API_KEY` as a Worker secret. Anyone visiting the demo can request suggestions. The Worker reserves up to eight generation requests per UTC day across the entire demo. Opening the page does not send a draft. The site sends draft text to Gemini when a visitor requests suggestions.
 
 ## Explore the workspace
 
