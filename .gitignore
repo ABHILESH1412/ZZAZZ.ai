@@ -16,3 +16,8 @@ Thumbs.db
 
 # Submission archives
 /folio-submission*.zip
+
+# Local Cloudflare files
+.wrangler/
+.dev.vars
+.dev.vars.*

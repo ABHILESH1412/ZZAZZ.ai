@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "folio-review-suggestions",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-11-25",
+  "workers_dev": true,
+  "preview_urls": false,
+  "vars": {
+    "FOLIO_ORIGIN": "https://abhilesh1412.github.io",
+    "GEMINI_MODEL": "gemini-3.1-flash-lite"
+  },
+  "secrets": { "required": ["GEMINI_API_KEY", "FOLIO_DEMO_CODE"] },
+  "durable_objects": {
+    "bindings": [{ "name": "FOLIO_DAILY_LIMIT", "class_name": "DailyLimit" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["DailyLimit"] }]
+}

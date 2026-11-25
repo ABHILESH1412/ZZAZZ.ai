@@ -19,6 +19,12 @@ Copy `.env.example` to `.env.local`, set `GEMINI_API_KEY` from [Google AI Studio
 
 On **Write & value**, select **Get AI suggestions**. Folio sends the title, topic, and up to 12,000 characters of body text to the [Gemini Developer API](https://aistudio.google.com/api-reference/generate-content). Editing and importing are local, and the valuation formula works offline with or without a key. API feedback is held in the editor view and refreshed manually after the draft changes.
 
+## Hosted reviewer demo
+
+The GitHub Pages frontend can use the Cloudflare Worker when the build sets `VITE_FOLIO_SUGGESTIONS_URL` to the Worker’s full `/api/editorial-suggestions` URL. Build the hosted frontend with `VITE_STATIC_DEMO=1` and Vite’s `--base /ZZAZZ.ai/`. Without a Worker URL, that static build shows the local setup note. `npm run check:worker` type-checks the Worker.
+
+The hosted demo uses Gemini 3.1 Flash-Lite. Set `GEMINI_API_KEY` and `FOLIO_DEMO_CODE` as Worker secrets. Use a randomly generated reviewer code of at least 16 characters and send it separately to reviewers. The Worker accepts requests from the configured Pages origin after checking the reviewer code, and reserves up to eight generation requests per UTC day across the entire demo. Opening the page does not send a draft. The site sends draft text to Gemini when a reviewer requests suggestions.
+
 ## Explore the workspace
 
 1. Change the story or topic on **Write & value**. Replace the body with a few repeated words to see the estimate and confidence fall.
